@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>銀魂：街頭大亂鬥 — GINTAMA FIGHTER II</title>
+  <link rel="stylesheet" href="styles.css?v=1" />
+</head>
+<body>
+  <div id="app">
+    <!-- 頂部街機標題列 -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="arcade-badge">魂</span>
+        <div>
+          <h1>銀魂：街頭大亂鬥</h1>
+          <span class="subtitle">GINTAMA STREET FIGHTER II</span>
+        </div>
+      </div>
+
+      <div class="mode-switch">
+        <button id="btn-mode-cpu" class="mode-btn active">🤖 1P vs 電腦</button>
+        <button id="btn-mode-pvp" class="mode-btn">👥 1P vs 2P 雙人</button>
+        <button id="btn-back-select" class="mode-btn hidden">🔙 重新選角</button>
+        <button id="btn-sound" class="mode-btn" title="音效開關">🔊</button>
+      </div>
+    </header>
+
+    <!-- 選角畫面 -->
+    <section id="select-screen" class="screen active">
+      <div class="select-header">
+        <h2>CHARACTER SELECT — 請選擇你的銀魂格鬥家</h2>
+        <p id="select-hint" class="select-hint">點擊角色選擇 <strong>1P</strong>，再點擊選擇對手 <strong>2P</strong></p>
+      </div>
+
+      <div class="select-stage">
+        <!-- 1P 預覽框 -->
+        <div class="preview-card p1-preview">
+          <div class="player-tag p1-tag">1P PLAYER</div>
+          <img id="p1-preview-img" src="assets/gintoki.png" alt="1P" />
+          <h3 id="p1-preview-name">坂田銀時</h3>
+          <div id="p1-preview-style" class="preview-style">洞爺湖波動斬 ／ 白夜叉亂舞</div>
+          <p id="p1-preview-quote" class="preview-quote">「只要有糖分就能戰到最後！」</p>
+        </div>
+
+        <!-- 中央角色格 -->
+        <div id="fighter-grid" class="fighter-grid"></div>
+
+        <!-- 2P 預覽框 -->
+        <div class="preview-card p2-preview">
+          <div class="player-tag p2-tag" id="p2-tag-label">CPU</div>
+          <img id="p2-preview-img" src="assets/hijikata.png" alt="2P" />
+          <h3 id="p2-preview-name">土方十四郎</h3>
+          <div id="p2-preview-style" class="preview-style">鬼之副長居合 ／ 美乃滋砲</div>
+          <p id="p2-preview-quote" class="preview-quote">「全體真選組，給我多加點美乃滋！」</p>
+        </div>
+      </div>
+
+      <div class="select-footer">
+        <div class="stage-picker">
+          <span>戰鬥舞台：</span>
+          <button class="stage-btn active" data-stage="kabukicho">🏮 歌舞伎町夜晚</button>
+          <button class="stage-btn" data-stage="dojo">⛩️ 恆道館道場</button>
+          <button class="stage-btn" data-stage="edo">🏯 江戶城天守</button>
+        </div>
+        <button id="btn-start-fight" class="btn-fight">⚔️ FIGHT! 開始決鬥</button>
+      </div>
+    </section>
+
+    <!-- 對戰畫面 -->
+    <section id="battle-screen" class="screen">
+      <div class="canvas-wrap">
+        <canvas id="game-canvas" width="1120" height="540"></canvas>
+      </div>
+
+      <!-- 底部操作提示列 -->
+      <footer class="controls-bar">
+        <div class="ctrl-group">
+          <span class="ctrl-tag p1">1P 操作</span>
+          <span>移動 <b>A / D</b> (或 ← →)</span>
+          <span>跳躍 <b>W</b> (或 ↑)</span>
+          <span>防禦 <b>S / 後退</b></span>
+          <span>輕攻 <b>J</b></span>
+          <span>重攻 <b>K</b></span>
+          <span>必殺技 <b>L</b></span>
+          <span>超必殺 <b>U</b> (滿氣)</span>
+        </div>
+        <div class="ctrl-group" id="p2-ctrl-hint">
+          <span class="ctrl-tag p2">2P 雙人</span>
+          <span>移動 <b>← / →</b></span>
+          <span>跳 <b>↑</b></span>
+          <span>蹲 <b>↓</b></span>
+          <span>攻擊 <b>1 / 2 / 3 / 4</b> (小鍵盤或 , . / ;)</span>
+        </div>
+      </footer>
+    </section>
+  </div>
+
+  <!-- 勝利結算彈窗 -->
+  <div id="ko-modal" class="modal hidden">
+    <div class="modal-box">
+      <div class="ko-badge">K.O. — WINNER!</div>
+      <img id="winner-img" src="assets/gintoki.png" alt="Winner" class="winner-avatar" />
+      <h2 id="winner-name">坂田銀時 獲勝！</h2>
+      <p id="winner-quote" class="winner-quote">「真是的，打架可是很消耗糖分的啊。」</p>
+      <div class="modal-actions">
+        <button id="btn-rematch" class="btn-fight">🔥 再戰一場</button>
+        <button id="btn-reselect" class="btn-secondary">🔙 回選角畫面</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="fighters.js?v=1"></script>
+  <script src="game.js?v=1"></script>
+</body>
+</html>

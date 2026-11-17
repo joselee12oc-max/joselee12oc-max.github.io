@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>銀魂遊戲大廳 — GINTAMA WEB ARCADE</title>
+  <style>
+    :root {
+      --bg: #090c15;
+      --panel: #131a2b;
+      --border: rgba(255, 255, 255, 0.12);
+      --gold: #fbbf24;
+      --cyan: #38bdf8;
+      --crimson: #ef4444;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      background: radial-gradient(circle at top center, #1c2745 0%, var(--bg) 70%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.2rem;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 2.2rem;
+    }
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      color: #090c15;
+      font-weight: 900;
+      padding: 0.25rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      letter-spacing: 1.5px;
+      margin-bottom: 0.75rem;
+    }
+    .header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+    .header p {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 420px));
+      gap: 1.6rem;
+      width: 100%;
+      max-width: 900px;
+      justify-content: center;
+    }
+    .game-card {
+      background: var(--panel);
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    }
+    .game-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+      box-shadow: 0 22px 50px rgba(251, 191, 36, 0.22);
+    }
+    .thumb {
+      height: 210px;
+      background: #0b1020;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .thumb img {
+      height: 165px;
+      width: 120px;
+      object-fit: cover;
+      object-position: top center;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+    .tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(9, 12, 21, 0.85);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+    }
+    .body {
+      padding: 1.3rem 1.4rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      flex: 1;
+    }
+    .body h2 {
+      font-size: 1.3rem;
+    }
+    .body p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+      flex: 1;
+    }
+    .play-btn {
+      display: inline-block;
+      text-align: center;
+      margin-top: 0.4rem;
+      padding: 0.7rem 1.2rem;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.98rem;
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      color: #fff;
+    }
+    .game-card.fighter .play-btn {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+    }
+    .footer {
+      margin-top: 2.2rem;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <span class="badge">YOROZYA WEB ARCADE</span>
+    <h1>🍡 銀魂遊戲大廳</h1>
+    <p>選擇一款《銀魂》主題遊戲，直接在瀏覽器開玩！</p>
+  </header>
+
+  <main class="grid">
+    <a class="game-card" href="./card-game/">
+      <div class="thumb">
+        <span class="tag">🃏 卡牌對戰</span>
+        <img src="./card-game/assets/cards/char_672.png" alt="坂田銀時" />
+        <img src="./card-game/assets/cards/item_justaway.png" alt="Justaway" />
+        <img src="./card-game/assets/cards/char_124135.png" alt="虛" />
+      </div>
+      <div class="body">
+        <h2>銀魂：萬事屋大亂鬥</h2>
+        <p>收錄 36 張銀魂角色與惡搞道具卡（含草莓牛奶、美乃滋、洞爺湖木刀、Justaway 炸彈、將軍內褲、Cosplay 模仿組），內含 8 大原作關卡、隱藏關卡「虛＆吉田松陽」與無盡挑戰賽！</p>
+        <span class="play-btn">⚔️ 進入卡牌對戰</span>
+      </div>
+    </a>
+
+    <a class="game-card fighter" href="./street-fighter/">
+      <div class="thumb">
+        <span class="tag">🥋 街機格鬥</span>
+        <img src="./street-fighter/assets/gintoki.png" alt="坂田銀時" />
+        <img src="./street-fighter/assets/hijikata.png" alt="土方十四郎" />
+        <img src="./street-fighter/assets/kagura.png" alt="神樂" />
+      </div>
+      <div class="body">
+        <h2>銀魂：街頭大亂鬥</h2>
+        <p>《快打旋風》街機風格 2D 橫向對打！支援單人打電腦與雙人同機對戰，可選銀時、神樂、土方、沖田、桂、高杉 6 位格鬥家，體驗必殺技連段、防禦與超必殺 K.O.！</p>
+        <span class="play-btn">🔥 進入街機格鬥</span>
+      </div>
+    </a>
+  </main>
+
+  <footer class="footer">
+    Built for GitHub Pages · 支援桌機與筆電瀏覽器即時遊玩
+  </footer>
+</body>
+</html>

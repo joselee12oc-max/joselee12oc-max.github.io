@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>銀魂：萬事屋大亂鬥 v2.1 — Gintama Card Battle</title>
+  <link rel="stylesheet" href="styles.css?v=20261117_20" />
+</head>
+<body>
+  <div id="app">
+    <!-- Top Navigation Bar -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-badge">銀</span>
+        <div class="brand-text">
+          <h1>銀魂：萬事屋大亂鬥</h1>
+          <span class="subtitle">GINTAMA CARD BATTLE · v2.1 必殺技與角色語音彈幕版</span>
+        </div>
+      </div>
+
+      <nav class="nav-tabs" aria-label="主選單">
+        <button class="nav-btn active" data-tab="battle">⚔️ 決鬥場</button>
+        <button class="nav-btn" data-tab="deck">🃏 牌組編輯</button>
+        <button class="nav-btn" data-tab="gallery">📖 角色圖鑑</button>
+        <button class="nav-btn" data-tab="rules">❓ 遊戲規則</button>
+      </nav>
+
+      <div class="topbar-actions">
+        <select id="stage-select" class="stage-select" title="選擇關卡"></select>
+        <button id="btn-new-game" class="btn btn-primary">重新開戰</button>
+        <button id="btn-sound" class="btn btn-icon" title="音效開關">🔊</button>
+      </div>
+    </header>
+
+    <!-- Main Content Views -->
+    <main class="main-container">
+      <!-- BATTLE VIEW -->
+      <section id="view-battle" class="view active">
+        <div class="battle-layout">
+          <!-- 左側欄：敵我雙方主將 ＋ 回合控制 -->
+          <aside class="hero-column">
+            <!-- Enemy Hero Card -->
+            <div class="hero-bar enemy-hero" id="enemy-hero-box">
+              <div class="hero-profile">
+                <div class="hero-avatar-wrap">
+                  <img id="enemy-avatar" src="" alt="Enemy" class="hero-avatar" />
+                  <span class="hero-hp-badge" id="enemy-hp">30</span>
+                </div>
+                <div class="hero-meta">
+                  <div class="hero-name" id="enemy-name">土方十四郎</div>
+                  <div class="hero-title" id="enemy-title">真選組鬼之副長</div>
+                </div>
+              </div>
+              <div class="hero-quote" id="enemy-taunt">「給我多加點美乃滋！」</div>
+              <div class="hero-resources">
+                <div class="resource-pill sugar-pill" title="敵方糖分">
+                  <span>🍮</span> <span id="enemy-sugar">1/1</span>
+                </div>
+                <div class="resource-pill" title="敵方手牌">
+                  <span>🖐️</span> <span id="enemy-hand-count">3</span>
+                </div>
+                <div class="resource-pill" title="敵方牌庫">
+                  <span>📚</span> <span id="enemy-deck-count">17</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Center Status Strip -->
+            <div class="center-strip">
+              <div class="turn-indicator" id="turn-indicator">第 1 回合 — 你的回合</div>
+              <div class="targeting-banner hidden" id="targeting-banner">
+                <span id="targeting-text">請選擇目標</span>
+                <button id="btn-cancel-target" class="btn btn-sm btn-ghost">取消</button>
+              </div>
+              <button id="btn-end-turn" class="btn btn-end-turn">結束回合 ⏭️</button>
+            </div>
+
+            <!-- Player Hero Card -->
+            <div class="hero-bar player-hero" id="player-hero-box">
+              <div class="hero-profile">
+                <div class="hero-avatar-wrap">
+                  <img id="player-avatar" src="" alt="Player" class="hero-avatar" />
+                  <span class="hero-hp-badge player-hp" id="player-hp">30</span>
+                </div>
+                <div class="hero-meta">
+                  <div class="hero-name">坂田銀時</div>
+                  <div class="hero-title">萬事屋老闆・白夜叉</div>
+                </div>
+              </div>
+              <div class="hero-quote" id="player-taunt">「只要有糖分就能活下去！」</div>
+              <div class="hero-resources">
+                <div class="resource-pill sugar-pill" title="可用糖分">
+                  <span>🍓</span> <span id="player-sugar">1/1</span>
+                </div>
+                <div class="resource-pill" title="手牌數量">
+                  <span>🖐️</span> <span id="player-hand-count">3</span>
+                </div>
+                <div class="resource-pill" title="牌庫剩餘">
+                  <span>📚</span> <span id="player-deck-count">17</span>
+                </div>
+              </div>
+              <button id="btn-hero-skill" class="btn hero-skill-btn" title="每回合限1次：消耗2糖分，回復2體力並對敵方全體造成1點傷害（≤15血變為2點）">
+                🍓 銀時必殺技 (2糖)
+              </button>
+            </div>
+          </aside>
+
+          <!-- 中央主戰場：只放敵方場上、我方場上、手牌，空間超大字體清晰！ -->
+          <div class="arena">
+            <div class="arena-zone">
+              <span class="zone-label enemy-label">敵方場上</span>
+              <div class="board-row enemy-board" id="enemy-board"></div>
+            </div>
+
+            <div class="arena-zone">
+              <span class="zone-label player-label">我方場上</span>
+              <div class="board-row player-board" id="player-board"></div>
+            </div>
+
+            <div class="arena-zone hand-zone">
+              <span class="zone-label hand-label">我方手牌</span>
+              <div class="hand-tray" id="player-hand"></div>
+            </div>
+
+            <!-- 漫畫風角色台詞彈幕 -->
+            <div id="comic-toast" class="comic-toast hidden">
+              <img id="toast-avatar" src="assets/cards/char_672.png" alt="" />
+              <div>
+                <div id="toast-speaker" class="toast-speaker">坂田銀時</div>
+                <div id="toast-text" class="toast-text">「只要有糖分就能活下去！」</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Sidebar: Card Inspector & Battle Log -->
+          <aside class="battle-sidebar">
+            <div class="panel inspector-panel">
+              <h3>🔍 卡牌詳情</h3>
+              <div id="card-inspector" class="inspector-content">
+                <p class="muted">將滑鼠移到或點擊任意卡牌，查看詳細技能與銀魂經典台詞。</p>
+              </div>
+            </div>
+            <div class="panel log-panel">
+              <h3>📜 戰況紀錄</h3>
+              <div id="battle-log" class="battle-log"></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- DECK BUILDER VIEW -->
+      <section id="view-deck" class="view">
+        <div class="deck-layout">
+          <div class="deck-collection">
+            <div class="view-header">
+              <h2>所有可用卡牌</h2>
+              <div class="filter-bar">
+                <button class="filter-btn active" data-faction="all">全部</button>
+                <button class="filter-btn" data-faction="yorozuya">萬事屋</button>
+                <button class="filter-btn" data-faction="shinsengumi">真選組</button>
+                <button class="filter-btn" data-faction="joui">攘夷・鬼兵隊</button>
+                <button class="filter-btn" data-faction="kabukicho">歌舞伎町・其他</button>
+                <button class="filter-btn" data-faction="spell">事件・道具</button>
+              </div>
+            </div>
+            <div id="deck-card-pool" class="card-grid"></div>
+          </div>
+          <aside class="deck-sidebar panel">
+            <div class="deck-sidebar-header">
+              <h3>我的牌組 (<span id="deck-count">0</span>/20)</h3>
+              <div class="deck-actions">
+                <button id="btn-reset-deck" class="btn btn-sm btn-ghost">預設牌組</button>
+                <button id="btn-save-deck" class="btn btn-sm btn-primary">套用並開戰</button>
+              </div>
+            </div>
+            <p class="muted small">點擊左側卡牌加入（每張最多 2 張），點擊右側列表移除。需滿 20 張。</p>
+            <div id="current-deck-list" class="deck-list"></div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- GALLERY VIEW -->
+      <section id="view-gallery" class="view">
+        <div class="view-header">
+          <h2>📖 銀魂角色與道具圖鑑</h2>
+          <p class="muted">收錄萬事屋、真選組、攘夷志士、歌舞伎町住民與經典搞笑道具！</p>
+        </div>
+        <div id="gallery-grid" class="card-grid gallery-grid"></div>
+      </section>
+
+      <!-- RULES VIEW -->
+      <section id="view-rules" class="view">
+        <div class="rules-card panel">
+          <h2>❓ 銀魂：萬事屋大亂鬥 — 完整遊戲規則</h2>
+          <div class="rules-grid">
+            <div class="rule-block">
+              <h3>1. 回合流程與糖分 🍓</h3>
+              <ul>
+                <li><strong>開局與補牌</strong>：雙方各有 20 張牌組，開局直接抽滿 <strong>5 張手牌</strong>；每當出牌使手牌低於 5 張時，會自動從牌庫<strong>隨時補滿 5 張</strong>（直到牌庫抽完）。</li>
+                <li><strong>回合開始</strong>：糖分上限 +1（最高 10 點）並補滿，同時抽 1 張牌（手牌上限 5 張）。</li>
+                <li><strong>出牌</strong>：點擊手牌中糖分足夠（藍色發光）的卡牌，即可召喚角色上場或施放事件／道具。</li>
+              </ul>
+            </div>
+            <div class="rule-block">
+              <h3>2. 召喚、攻擊與操作 ⚔️</h3>
+              <ul>
+                <li>場上最多可同時存在 <strong>5 名角色</strong>。</li>
+                <li>一般角色登場當回合需待機；<strong>綠框發光</strong>代表本回合可攻擊。</li>
+                <li><strong>攻擊方式</strong>：點擊己方綠框角色 → 再點擊敵方角色或敵方主將！</li>
+                <li><strong>指定道具</strong>：點擊需要目標的道具卡後，點選對應的友方或敵方目標（可按「取消」收回）。</li>
+              </ul>
+            </div>
+            <div class="rule-block">
+              <h3>3. 前列防線與技能關鍵詞 🛡️</h3>
+              <ul>
+                <li><strong>嘲諷 (前列擋箭牌)</strong>：敵人必須先擊敗所有具「嘲諷」的角色，才能攻擊其他角色或主將。</li>
+                <li><strong>煞車 (停攻控場 🛑)</strong>：中了「煞車」的角色下回合無法攻擊（如將軍大人、新八吐槽、月詠苦無、阿姆斯特朗砲）。</li>
+                <li><strong>護盾 (🛡️)</strong>：抵擋第一次受到的戰鬥或技能傷害，破盾後才開始扣血。</li>
+                <li><strong>突襲</strong>：登場當回合即可立刻攻擊。</li>
+                <li><strong>登場 / 亡語 / 白夜叉</strong>：進場或退場時觸發特殊效果；銀時在我方 ≤ 15 血時會覺醒！</li>
+              </ul>
+            </div>
+            <div class="rule-block">
+              <h3>4. 勝負條件與關卡 🏆</h3>
+              <ul>
+                <li><strong>獲勝條件</strong>：將敵方主將體力打到 <strong>0</strong>，或讓敵方<strong>牌庫耗盡（無牌可抽）</strong>即立刻獲勝！</li>
+                <li><strong>敗北條件</strong>：我方主將體力歸 0，或我方牌庫耗盡無牌可抽。</li>
+                <li><strong>8 大經典關卡</strong>：從真選組巡邏隊一路打到 MADAO 究極逆襲，也可到「牌組編輯」自由調整 20 張牌組（同卡最多 2 張）。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Victory / Defeat Modal -->
+  <div id="result-modal" class="modal hidden">
+    <div id="modal-box" class="modal-box">
+      <div id="modal-badge" class="result-badge win">WIN · 你贏了！</div>
+      <div id="modal-emoji" class="modal-emoji">🏆</div>
+      <h2 id="modal-title">勝利！</h2>
+      <div id="modal-reason" class="modal-reason"></div>
+      <div class="modal-quote-box">
+        <img id="modal-speaker-img" src="assets/cards/char_672.png" alt="角色頭像" class="modal-speaker-avatar" />
+        <div class="modal-quote-content">
+          <div id="modal-speaker-name" class="modal-speaker-name">坂田銀時</div>
+          <p id="modal-quote-text" class="modal-quote-text">「只要有糖分就能活下去！」</p>
+        </div>
+      </div>
+      <p id="modal-desc" class="modal-subdesc"></p>
+      <div class="modal-actions">
+        <button id="btn-modal-retry" class="btn btn-primary">再戰一局</button>
+        <button id="btn-modal-next" class="btn btn-accent">挑戰下一關</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="cards.js?v=20261117_20"></script>
+  <script src="game.js?v=20261117_20"></script>
+</body>
+</html>
