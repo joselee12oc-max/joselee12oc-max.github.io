@@ -1256,6 +1256,27 @@
       e.target.textContent = SFX.enabled ? '🔊' : '🔇';
     });
 
+    // 綁定手機／平板觸控虛擬搖桿與街機按鍵
+    document.querySelectorAll('#touch-controls .touch-btn').forEach((btn) => {
+      const code = btn.dataset.key;
+      const press = (e) => {
+        e.preventDefault();
+        keys[code] = true;
+        btn.classList.add('pressed');
+      };
+      const release = (e) => {
+        e.preventDefault();
+        keys[code] = false;
+        btn.classList.remove('pressed');
+      };
+      btn.addEventListener('touchstart', press, { passive: false });
+      btn.addEventListener('touchend', release, { passive: false });
+      btn.addEventListener('touchcancel', release, { passive: false });
+      btn.addEventListener('mousedown', press);
+      btn.addEventListener('mouseup', release);
+      btn.addEventListener('mouseleave', release);
+    });
+
     updateSelectPreviews();
     renderSelectGrid();
   }

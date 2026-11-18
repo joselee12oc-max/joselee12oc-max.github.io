@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <title>銀魂：街頭大亂鬥 — GINTAMA FIGHTER II</title>
-  <link rel="stylesheet" href="styles.css?v=1" />
+  <link rel="stylesheet" href="styles.css?v=2" />
 </head>
 <body>
   <div id="app">
@@ -74,6 +74,24 @@
         <canvas id="game-canvas" width="1120" height="540"></canvas>
       </div>
 
+      <!-- 手機 / 平板觸控虛擬街機搖桿與按鍵 -->
+      <div id="touch-controls" class="touch-controls">
+        <div class="dpad">
+          <button class="touch-btn dpad-up" data-key="KeyW">⬆️</button>
+          <div class="dpad-mid">
+            <button class="touch-btn dpad-left" data-key="KeyA">⬅️</button>
+            <button class="touch-btn dpad-down" data-key="KeyS">⬇️</button>
+            <button class="touch-btn dpad-right" data-key="KeyD">➡️</button>
+          </div>
+        </div>
+        <div class="action-pad">
+          <button class="touch-btn atk-btn atk-light" data-key="KeyJ">輕攻</button>
+          <button class="touch-btn atk-btn atk-heavy" data-key="KeyK">重攻</button>
+          <button class="touch-btn atk-btn atk-special" data-key="KeyL">必殺</button>
+          <button class="touch-btn atk-btn atk-super" data-key="KeyU">超必殺</button>
+        </div>
+      </div>
+
       <!-- 底部操作提示列 -->
       <footer class="controls-bar">
         <div class="ctrl-group">
@@ -111,7 +129,7 @@
     </div>
   </div>
 
-  <script src="fighters.js?v=1"></script>
-  <script src="game.js?v=1"></script>
+  <script src="fighters.js?v=2"></script>
+  <script src="game.js?v=2"></script>
 </body>
 </html>
