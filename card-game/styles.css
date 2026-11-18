@@ -1351,27 +1351,40 @@ body {
   #view-battle .battle-layout {
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
-  }
-
-  /* 手機上把主將/結束回合放在最上方緊湊顯示 */
-  .hero-column {
-    order: 1;
-    display: flex;
-    flex-direction: column;
     gap: 0.4rem;
   }
 
+  /* 手機版：使用 display: contents 讓敵方全在上面、我方全在底下 */
+  .hero-column,
+  #view-battle .arena {
+    display: contents;
+  }
+
+  #enemy-hero-box { order: 1; }
+  #view-battle .arena > .arena-zone:nth-child(1) { order: 2; }
+  .hero-column .center-strip { order: 3; }
+  #view-battle .arena > .arena-zone:nth-child(2) { order: 4; }
+  #player-hero-box { order: 5; }
+  #view-battle .arena > .hand-zone { order: 6; }
+  #view-battle .battle-sidebar { order: 7; }
+
+  #comic-toast {
+    position: fixed;
+    top: 44%;
+    left: 50%;
+    width: min(92vw, 360px);
+  }
+
   .hero-column .hero-bar {
-    padding: 0.45rem 0.65rem;
-    gap: 0.45rem;
+    padding: 0.42rem 0.65rem;
+    gap: 0.4rem;
     flex-wrap: wrap;
   }
 
   .hero-column .hero-avatar-wrap,
   .hero-column .hero-avatar {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
   }
 
   .hero-column .hero-quote {
@@ -1380,18 +1393,14 @@ body {
 
   .hero-column .hero-skill-btn {
     width: 100%;
-    padding: 0.4rem;
+    padding: 0.38rem;
     font-size: 0.84rem;
   }
 
   .hero-column .center-strip {
-    padding: 0.4rem 0.6rem;
-  }
-
-  #view-battle .arena {
-    order: 2;
-    padding: 0.45rem;
-    gap: 0.45rem;
+    padding: 0.35rem 0.6rem;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
   }
 
   .zone-label {
@@ -1426,10 +1435,6 @@ body {
   #view-battle .card-desc {
     font-size: 0.6rem;
     -webkit-line-clamp: 2;
-  }
-
-  #view-battle .battle-sidebar {
-    order: 3;
   }
 
   .card-grid {
