@@ -7,6 +7,7 @@
 - **🎮 遊戲大廳首頁**：https://joselee12oc-max.github.io/
 - **🃏 銀魂：萬事屋大亂鬥（卡牌對戰）**：https://joselee12oc-max.github.io/card-game/
 - **🥋 銀魂：街頭大亂鬥（快打旋風格鬥）**：https://joselee12oc-max.github.io/street-fighter/
+- **👓 銀魂：吐槽之魂（Soul of Tsukkomi）**：https://joselee12oc-max.github.io/gintama-soul-of-tsukkomi/
 
 ---
 

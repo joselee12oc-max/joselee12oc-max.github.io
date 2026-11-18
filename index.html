@@ -53,10 +53,10 @@
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 420px));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 360px));
       gap: 1.4rem;
       width: 100%;
-      max-width: 900px;
+      max-width: 1180px;
       justify-content: center;
     }
     .game-card {
@@ -138,6 +138,9 @@
     .game-card.fighter .play-btn {
       background: linear-gradient(135deg, #f59e0b, #ef4444);
     }
+    .game-card.tsukkomi .play-btn {
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+    }
     .footer {
       margin-top: 2.2rem;
       color: var(--muted);
@@ -178,6 +181,20 @@
         <h2>銀魂：街頭大亂鬥</h2>
         <p>《快打旋風》街機風格 2D 橫向對打！支援單人打電腦與雙人同機對戰，可選銀時、神樂、土方、沖田、桂、高杉 6 位格鬥家，體驗必殺技連段、防禦與超必殺 K.O.！</p>
         <span class="play-btn">🔥 進入街機格鬥</span>
+      </div>
+    </a>
+
+    <a class="game-card tsukkomi" href="https://joselee12oc-max.github.io/gintama-soul-of-tsukkomi/">
+      <div class="thumb">
+        <span class="tag">👓 吐槽之魂</span>
+        <img src="./card-game/assets/cards/char_673.jpg" alt="志村新八" />
+        <img src="./card-game/assets/cards/char_1533.png" alt="桂小太郎" />
+        <img src="./card-game/assets/cards/char_3760.png" alt="長谷川泰三" />
+      </div>
+      <div class="body">
+        <h2>銀魂：吐槽之魂</h2>
+        <p>發揮新八與萬事屋的宇宙級吐槽靈魂！挑戰《銀魂》專屬反應與吐槽冒險，點擊立即前往遊玩！</p>
+        <span class="play-btn">👓 進入吐槽之魂</span>
       </div>
     </a>
   </main>
