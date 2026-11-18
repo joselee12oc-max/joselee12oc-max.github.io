@@ -158,6 +158,7 @@
     document.getElementById('btn-back-select').classList.remove('hidden');
     document.getElementById('ko-modal').classList.add('hidden');
     document.getElementById('p2-ctrl-hint').style.opacity = gameMode === 'pvp' ? '1' : '0.45';
+    document.getElementById('touch-p2-panel').classList.toggle('hidden', gameMode !== 'pvp');
 
     if (rafId) cancelAnimationFrame(rafId);
     loop();
@@ -402,12 +403,10 @@
       f.state = 'jump';
     }
 
-    const isPressed = (k) => Array.isArray(k) ? k.some((c) => keys[c]) : !!keys[k];
-
-    if (isPressed(controls.light)) startAttack(f, opp, 'light');
-    else if (isPressed(controls.heavy)) startAttack(f, opp, 'heavy');
-    else if (isPressed(controls.special)) startAttack(f, opp, 'special');
-    else if (isPressed(controls.super)) startAttack(f, opp, 'super');
+    if (keys[controls.light] || (controls.altLight && keys[controls.altLight])) startAttack(f, opp, 'light');
+    else if (keys[controls.heavy] || (controls.altHeavy && keys[controls.altHeavy])) startAttack(f, opp, 'heavy');
+    else if (keys[controls.special] || (controls.altSpecial && keys[controls.altSpecial])) startAttack(f, opp, 'special');
+    else if (keys[controls.super] || (controls.altSuper && keys[controls.altSuper])) startAttack(f, opp, 'super');
   }
 
   function handleCpuAi(cpu, player) {
@@ -569,10 +568,8 @@
       } else {
         const p2Ctrl = {
           left: 'ArrowLeft', right: 'ArrowRight', up: 'ArrowUp', down: 'ArrowDown',
-          light: ['Numpad1', 'Digit1', 'Comma'],
-          heavy: ['Numpad2', 'Digit2', 'Period'],
-          special: ['Numpad3', 'Digit3', 'Slash'],
-          super: ['Numpad4', 'Digit4', 'Semicolon']
+          light: 'Numpad1', heavy: 'Numpad2', special: 'Numpad3', super: 'Numpad4',
+          altLight: 'Comma', altHeavy: 'Period', altSpecial: 'Slash', altSuper: 'Semicolon'
         };
         handleFighterInput(match.p2, match.p1, p2Ctrl);
       }
@@ -640,6 +637,21 @@
       ft.life -= 1;
       if (ft.life <= 0) match.floatingTexts.splice(i, 1);
     }
+  }
+
+  function drawRoundRect(c, x, y, w, h, r) {
+    const rad = Math.min(r, w / 2, h / 2);
+    c.beginPath();
+    c.moveTo(x + rad, y);
+    c.lineTo(x + w - rad, y);
+    c.quadraticCurveTo(x + w, y, x + w, y + rad);
+    c.lineTo(x + w, y + h - rad);
+    c.quadraticCurveTo(x + w, y + h, x + w - rad, y + h);
+    c.lineTo(x + rad, y + h);
+    c.quadraticCurveTo(x, y + h, x, y + h - rad);
+    c.lineTo(x, y + rad);
+    c.quadraticCurveTo(x, y, x + rad, y);
+    c.closePath();
   }
 
   // === 舞台與角色繪製 ===
@@ -772,10 +784,9 @@
     ctx.fillRect(-14 + walkSwing, -32 + crouchOffset * 0.4, 11, 32 - crouchOffset * 0.4);
     ctx.fillRect(3 - walkSwing, -32 + crouchOffset * 0.4, 11, 32 - crouchOffset * 0.4);
 
-    // 身體和服／制服
+    // 身體和服／制服 (跨瀏覽器相容圓角矩形)
     ctx.fillStyle = f.def.bodyColor;
-    ctx.beginPath();
-    ctx.roundRect(-20, bodyY, 40, 46 - crouchOffset * 0.3, 8);
+    drawRoundRect(ctx, -20, bodyY, 40, 46 - crouchOffset * 0.3, 8);
     ctx.fill();
 
     // 角色特徵花紋 / 腰帶
@@ -918,8 +929,7 @@
       if (p.kind === 'elizabeth') {
         // 可愛的伊莉莎白衝撞
         ctx.fillStyle = '#f8fafc';
-        ctx.beginPath();
-        ctx.roundRect(-22, -30, 44, 56, 20);
+        drawRoundRect(ctx, -22, -30, 44, 56, 20);
         ctx.fill();
         ctx.fillStyle = '#fb923c';
         ctx.fillRect(6, -12, 16, 7);
@@ -1217,7 +1227,7 @@
       gameMode = 'cpu';
       e.target.classList.add('active');
       document.getElementById('btn-mode-pvp').classList.remove('active');
-      document.getElementById('p2-ctrl-hint').style.opacity = '0.45';
+      document.getElementById('touch-p2-panel').classList.add('hidden');
       updateSelectPreviews();
       renderSelectGrid();
     });
@@ -1226,9 +1236,22 @@
       gameMode = 'pvp';
       e.target.classList.add('active');
       document.getElementById('btn-mode-cpu').classList.remove('active');
-      document.getElementById('p2-ctrl-hint').style.opacity = '1';
+      document.getElementById('touch-p2-panel').classList.remove('hidden');
       updateSelectPreviews();
       renderSelectGrid();
+    });
+
+    // 觸控搖桿開關（手機／平板預設自動開啟）
+    const touchEl = document.getElementById('touch-controls');
+    const touchToggleBtn = document.getElementById('btn-touch-toggle');
+    const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth <= 1180;
+    if (isTouchDevice) {
+      touchEl.classList.add('force-show');
+      touchToggleBtn.classList.add('active');
+    }
+    touchToggleBtn.addEventListener('click', () => {
+      const shown = touchEl.classList.toggle('force-show');
+      touchToggleBtn.classList.toggle('active', shown);
     });
 
     document.querySelectorAll('.stage-btn').forEach((btn) => {
@@ -1258,7 +1281,7 @@
       e.target.textContent = SFX.enabled ? '🔊' : '🔇';
     });
 
-    // 綁定手機／平板觸控虛擬搖桿與街機按鍵
+    // 綁定手機／平板觸控虛擬搖桿與街機按鍵（支援多點觸控與滑鼠點擊）
     document.querySelectorAll('#touch-controls .touch-btn').forEach((btn) => {
       const code = btn.dataset.key;
       const press = (e) => {
@@ -1271,12 +1294,10 @@
         keys[code] = false;
         btn.classList.remove('pressed');
       };
-      btn.addEventListener('touchstart', press, { passive: false });
-      btn.addEventListener('touchend', release, { passive: false });
-      btn.addEventListener('touchcancel', release, { passive: false });
-      btn.addEventListener('mousedown', press);
-      btn.addEventListener('mouseup', release);
-      btn.addEventListener('mouseleave', release);
+      btn.addEventListener('pointerdown', press);
+      btn.addEventListener('pointerup', release);
+      btn.addEventListener('pointercancel', release);
+      btn.addEventListener('pointerleave', release);
     });
 
     updateSelectPreviews();

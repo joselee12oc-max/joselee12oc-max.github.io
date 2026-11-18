@@ -22,6 +22,7 @@
       <div class="mode-switch">
         <button id="btn-mode-cpu" class="mode-btn active">🤖 1P vs 電腦</button>
         <button id="btn-mode-pvp" class="mode-btn">👥 1P vs 2P 雙人</button>
+        <button id="btn-touch-toggle" class="mode-btn" title="切換虛擬觸控搖桿">🕹️ 搖桿</button>
         <button id="btn-back-select" class="mode-btn hidden">🔙 重新選角</button>
         <button id="btn-sound" class="mode-btn" title="音效開關">🔊</button>
       </div>
@@ -76,19 +77,38 @@
 
       <!-- 手機 / 平板觸控虛擬街機搖桿與按鍵 -->
       <div id="touch-controls" class="touch-controls">
-        <div class="dpad">
-          <button class="touch-btn dpad-up" data-key="KeyW">⬆️</button>
-          <div class="dpad-mid">
-            <button class="touch-btn dpad-left" data-key="KeyA">⬅️</button>
-            <button class="touch-btn dpad-down" data-key="KeyS">⬇️</button>
-            <button class="touch-btn dpad-right" data-key="KeyD">➡️</button>
+        <div class="touch-player-group">
+          <div class="dpad">
+            <button class="touch-btn dpad-up" data-key="KeyW">⬆️</button>
+            <div class="dpad-mid">
+              <button class="touch-btn dpad-left" data-key="KeyA">⬅️</button>
+              <button class="touch-btn dpad-down" data-key="KeyS">⬇️</button>
+              <button class="touch-btn dpad-right" data-key="KeyD">➡️</button>
+            </div>
+          </div>
+          <div class="action-pad">
+            <button class="touch-btn atk-btn atk-light" data-key="KeyJ">輕攻</button>
+            <button class="touch-btn atk-btn atk-heavy" data-key="KeyK">重攻</button>
+            <button class="touch-btn atk-btn atk-special" data-key="KeyL">必殺</button>
+            <button class="touch-btn atk-btn atk-super" data-key="KeyU">超必殺</button>
           </div>
         </div>
-        <div class="action-pad">
-          <button class="touch-btn atk-btn atk-light" data-key="KeyJ">輕攻</button>
-          <button class="touch-btn atk-btn atk-heavy" data-key="KeyK">重攻</button>
-          <button class="touch-btn atk-btn atk-special" data-key="KeyL">必殺</button>
-          <button class="touch-btn atk-btn atk-super" data-key="KeyU">超必殺</button>
+
+        <div id="touch-p2-panel" class="touch-player-group p2-touch hidden">
+          <div class="dpad">
+            <button class="touch-btn dpad-up" data-key="ArrowUp">⬆️</button>
+            <div class="dpad-mid">
+              <button class="touch-btn dpad-left" data-key="ArrowLeft">⬅️</button>
+              <button class="touch-btn dpad-down" data-key="ArrowDown">⬇️</button>
+              <button class="touch-btn dpad-right" data-key="ArrowRight">➡️</button>
+            </div>
+          </div>
+          <div class="action-pad">
+            <button class="touch-btn atk-btn atk-light" data-key="Numpad1">2P輕</button>
+            <button class="touch-btn atk-btn atk-heavy" data-key="Numpad2">2P重</button>
+            <button class="touch-btn atk-btn atk-special" data-key="Numpad3">2P必</button>
+            <button class="touch-btn atk-btn atk-super" data-key="Numpad4">2P超</button>
+          </div>
         </div>
       </div>
 
@@ -109,7 +129,7 @@
           <span>移動 <b>← / →</b></span>
           <span>跳 <b>↑</b></span>
           <span>蹲 <b>↓</b></span>
-          <span>攻擊 <b>1 / 2 / 3 / 4</b> (主鍵盤/小鍵盤) 或 <b>, . / ;</b></span>
+          <span>攻擊 <b>1 / 2 / 3 / 4</b> (小鍵盤或 , . / ;)</span>
         </div>
       </footer>
     </section>
