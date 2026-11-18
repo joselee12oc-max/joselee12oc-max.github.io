@@ -402,10 +402,12 @@
       f.state = 'jump';
     }
 
-    if (keys[controls.light]) startAttack(f, opp, 'light');
-    else if (keys[controls.heavy]) startAttack(f, opp, 'heavy');
-    else if (keys[controls.special]) startAttack(f, opp, 'special');
-    else if (keys[controls.super]) startAttack(f, opp, 'super');
+    const isPressed = (k) => Array.isArray(k) ? k.some((c) => keys[c]) : !!keys[k];
+
+    if (isPressed(controls.light)) startAttack(f, opp, 'light');
+    else if (isPressed(controls.heavy)) startAttack(f, opp, 'heavy');
+    else if (isPressed(controls.special)) startAttack(f, opp, 'special');
+    else if (isPressed(controls.super)) startAttack(f, opp, 'super');
   }
 
   function handleCpuAi(cpu, player) {
@@ -567,13 +569,11 @@
       } else {
         const p2Ctrl = {
           left: 'ArrowLeft', right: 'ArrowRight', up: 'ArrowUp', down: 'ArrowDown',
-          light: 'Numpad1', heavy: 'Numpad2', special: 'Numpad3', super: 'Numpad4',
-          // 筆電沒有小鍵盤時也支援 , . / ;
+          light: ['Numpad1', 'Digit1', 'Comma'],
+          heavy: ['Numpad2', 'Digit2', 'Period'],
+          special: ['Numpad3', 'Digit3', 'Slash'],
+          super: ['Numpad4', 'Digit4', 'Semicolon']
         };
-        if (keys['Comma']) keys['Numpad1'] = true;
-        if (keys['Period']) keys['Numpad2'] = true;
-        if (keys['Slash']) keys['Numpad3'] = true;
-        if (keys['Semicolon']) keys['Numpad4'] = true;
         handleFighterInput(match.p2, match.p1, p2Ctrl);
       }
     } else if (match.phase === 'roundEnd') {
@@ -1217,6 +1217,7 @@
       gameMode = 'cpu';
       e.target.classList.add('active');
       document.getElementById('btn-mode-pvp').classList.remove('active');
+      document.getElementById('p2-ctrl-hint').style.opacity = '0.45';
       updateSelectPreviews();
       renderSelectGrid();
     });
@@ -1225,6 +1226,7 @@
       gameMode = 'pvp';
       e.target.classList.add('active');
       document.getElementById('btn-mode-cpu').classList.remove('active');
+      document.getElementById('p2-ctrl-hint').style.opacity = '1';
       updateSelectPreviews();
       renderSelectGrid();
     });
